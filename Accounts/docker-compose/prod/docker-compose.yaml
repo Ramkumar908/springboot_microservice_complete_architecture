@@ -1,0 +1,77 @@
+version:  "3.8"
+
+services:
+
+
+  configserver:
+    image: ramspringms/configserver:latest
+    mem_limit: 700m
+    ports:
+      - "8071:8071"
+    networks:
+      - easybank-network
+      
+      
+      
+  accounts:
+    image: ramspringms/accounts:latest
+    mem_limit: 700m
+    ports:
+      - "8080:8080"
+    networks:
+      - easybank-network
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILE_ACTIVE: production 
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      
+  loans:
+    image: ramspringms/loans:latest
+    mem_limit: 700m
+    ports:
+      - "9090:9090"
+    networks:
+      - easybank-network
+    depends_on:
+      - configserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILE_ACTIVE: production 
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      
+                
+  cards:
+    image: ramspringms/cards:latest
+    mem_limit: 700m
+    ports:
+      - "9091:9091"
+    networks:
+      - easybank-network
+    depends_on: 
+      - configserver
+    deploy:
+      restart_policy: 
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      SPRING_PROFILE_ACTIVE: production
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/    
+
+networks:
+  easybank-network: {}   
+      
+    

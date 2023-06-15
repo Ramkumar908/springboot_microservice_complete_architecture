@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: GeniusTech
+security:
+  oauth2:
+    client:
+      client-id: 799336591399398
+      client-secret: c82e1303a2f1d8ce88962f1a8298939f
+      access-token-uri: https://graph.facebook.com/oauth/access_token
+      user-authorization-uri: https://www.facebook.com/dialog/oauth
+      token-name: oauth_token
+      authentication-scheme: query
+      client-authentication-scheme: form
+    resource:
+      user-info-uri: https://graph.facebook.com/me
